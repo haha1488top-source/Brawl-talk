@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brawl Talk - Logic UA Studio</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body, html {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #000;
+            font-family: 'Arial', sans-serif;
+        }
+
+        /* Сцена 16:9 */
+        .brawl-talk-stage {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            max-height: 56.25vw;
+            max-width: 177.78vh;
+            margin: auto;
+            top: 50%;
+            transform: translateY(-50%);
+            background-image: url('Img/1779096735289.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            box-shadow: 0 0 30px rgba(0,0,0,0.8);
+            overflow: hidden;
+        }
+
+        /* ПРЕВ'Ю ЗАСТАВКА ВІД КОРИСТУВАЧА */
+        #preview-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #000;
+            z-index: 100; /* Закриває абсолютно все */
+            transition: opacity 0.6s ease-in-out;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .preview-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .slide-deck {
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.5s ease-in-out, visibility 0.5s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding-left: 5%;
+            padding-right: 45%;
+        }
+
+        .slide.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Демонстрація ліворуч */
+        .slide-media {
+            max-width: 100%;
+            max-height: 90%;
+            object-fit: contain;
+            border: 5px solid #ffcc00;
+            border-radius: 20px;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.9);
+            background-color: rgba(0,0,0,0.5);
+        }
+
+        /* Субтитри праворуч */
+        .subtitles-container {
+            position: absolute;
+            top: 50%;
+            right: 4%;
+            transform: translateY(-50%);
+            width: 36%;
+            background: rgba(0, 0, 0, 0.92);
+            border-left: 5px solid #ffcc00;
+            padding: 25px 20px;
+            border-radius: 12px;
+            text-align: left;
+            z-index: 10;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.8);
+            opacity: 0; /* Приховані до старту */
+            transition: opacity 0.4s ease-in-out;
+        }
+
+        .subtitle-text {
+            color: #ffffff;
+            font-size: 22px;
+            font-weight: bold;
+            line-height: 1.4;
+            text-shadow: 2px 2px 3px #000;
+        }
+
+        /* Фінальні сцени */
+        .end-screen {
+            background: linear-gradient(135deg, #0f172a 0%, #3b0764 100%);
+            align-items: center;
+            justify-content: center !important;
+            padding: 0 !important;
+            z-index: 20;
+        }
+
+        .end-screen-text {
+            color: #ffcc00;
+            font-size: 65px;
+            font-family: 'Arial Black', sans-serif;
+            text-transform: uppercase;
+            text-shadow: 0 10px 20px rgba(0,0,0,0.8);
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+<div class="brawl-talk-stage">
+
+    <div id="preview-overlay">
+        <img class="preview-img" src="Img/1779802096355.png" alt="Brawl Talk Прев'ю">
+    </div>
+
+    <div class="slide-deck">
+        <div class="slide active" data-sub="Привіт усім! Ми раді розповісти вам про неймовірні новинки, які чекають на вас у грі.">
+        </div>
+
+        <div class="slide" data-sub="Новий боєць цього оновлення — Гейл!">
+            <img class="slide-media" src="Img/gale_default_001.png" alt="Новий боєць Гейл">
+        </div>
+
+        <div class="slide" data-sub="Він буде доступний у нашому новому Brawl Pass.">
+            <img class="slide-media" src="Img/gale_default_001.png" alt="Гейл у Brawl Pass">
+        </div>
+
+        <div class="slide" data-sub="Також у Brawl Pass на вас чекає багато цінних нагород, серед яких монети,">
+            <img class="slide-media" src="Img/coin.png" alt="Монети">
+        </div>
+
+        <div class="slide" data-sub="блискучі кристали для ваших покупок,">
+            <img class="slide-media" src="Img/gem.png" alt="Кристали">
+        </div>
+
+        <div class="slide" data-sub="а також різноманітні ящики для швидкого прокачування!">
+            <img class="slide-media" src="Img/image2269.png" alt="Ящики">
+        </div>
+
+        <div class="slide" data-sub="Відкривайте їх, щоб отримати ще більше крутих бонуів та ресурсів.">
+            <img class="slide-media" src="Img/image2271.png" alt="Ящики нагороди">
+        </div>
+
+        <div class="slide" data-sub="Окрім цього, у грі з'являться абсолютно нові набори емодзі!">
+            <img class="slide-media" src="Img/pin_pack_icon.png" alt="Набори емодзі">
+        </div>
+
+        <div class="slide" data-sub="Ви зможете знайти їх у Brawl Pass, магазині, а пізніше — і за денні перемоги.">
+            <img class="slide-media" src="Img/pin_pack_icon.png" alt="Пінпаки в грі">
+        </div>
+
+        <div class="slide" data-sub="А тепер перейдемо до яскравих скінів цього оновлення! Зустрічайте: Торговець Гейл в кінці Brawl Pass!">
+            <img class="slide-media" src="Img/gale_merchant_gale_001.png" alt="Торговець Гейл">
+        </div>
+
+        <div class="slide" data-sub="Також на вас чекає ще один космічний скін — Галактичний Гейл!">
+            <img class="slide-media" src="Img/gale_galactic_gale_001.png" alt="Галактичний Гейл">
+        </div>
+
+        <div class="slide" data-sub="Зустрічайте стильного та небезпечного Меверик Ворона!">
+            <img class="slide-media" src="Img/crow_maverick.png" alt="Меверик Ворон">
+        </div>
+
+        <div class="slide" data-sub="Та, звичайно ж, неймовірна Робо Пенні!">
+            <img class="slide-media" src="Img/penny_robo_penny_001.png" alt="Робо Пенні">
+        </div>
+
+        <div class="slide end-screen" data-sub="">
+            <div class="end-screen-text">Дякуємо за перегляд!</div>
+        </div>
+
+        <div class="slide end-screen" data-sub="">
+            <div class="end-screen-text">До зустрічі у червні 👋</div>
+        </div>
+    </div>
+
+    <div class="subtitles-container" id="sub-container">
+        <div class="subtitle-text" id="sub-box">Привіт усім! Ми раді розповісти вам про неймовірні новинки, які чекають на вас у грі.</div>
+    </div>
+</div>
+
+<script>
+    const slides = document.querySelectorAll('.slide');
+    const subBox = document.getElementById('sub-box');
+    const subContainer = document.getElementById('sub-container');
+    const previewOverlay = document.getElementById('preview-overlay');
+    
+    let currentIdx = 0;
+    const slideDuration = 5500; 
+    let intervalId = null;
+
+    function nextSlide() {
+        slides[currentIdx].classList.remove('active');
+        currentIdx++;
+        
+        if (currentIdx >= slides.length - 1) {
+            clearInterval(intervalId);
+            currentIdx = slides.length - 1;
+        }
+
+        slides[currentIdx].classList.add('active');
+        
+        const text = slides[currentIdx].getAttribute('data-sub');
+        if (text) {
+            subBox.innerText = text;
+            subContainer.style.opacity = '1';
+        } else {
+            subContainer.style.opacity = '0';
+        }
+    }
+
+    // ТАЙМЕР ЗАМОРОЗКИ (До 27 травня 2026 року, 11:00 за Києвом / UTC+3)
+    const targetDate = new Date("2026-05-27T11:00:00+03:00");
+
+    function checkLockStatus() {
+        const now = new Date();
+        const timeRemaining = targetDate - now;
+
+        if (timeRemaining > 0) {
+            // Заставка закриває все, субтитри вимкнені
+            previewOverlay.style.display = 'flex';
+            subContainer.style.opacity = '0'; 
+            
+            setTimeout(() => {
+                unlockBrawlTalk();
+            }, timeRemaining);
+        } else {
+            // Час уже настав, показуємо одразу
+            unlockBrawlTalk();
+        }
+    }
+
+    function unlockBrawlTalk() {
+        // Ховаємо прев'ю-картинку
+        previewOverlay.style.opacity = '0';
+        setTimeout(() => {
+            previewOverlay.style.display = 'none';
+            // Активуємо субтитри для першого слайду після прибирання заставки
+            subContainer.style.opacity = '1';
+        }, 600);
+        
+        // Розморожуємо відтворення слайд-шоу
+        if (!intervalId) {
+            intervalId = setInterval(nextSlide, slideDuration);
+        }
+    }
+
+    // Перевіряємо запуск при завантаженні сторінки
+    checkLockStatus();
+</script>
+
+</body>
+</html>
